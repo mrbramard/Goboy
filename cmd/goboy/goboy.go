@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"goboy/internal/cartridge"
+	"os"
+)
 
 func main() {
-  fmt.Println("Hello Goboy!")
+	dat, _ := os.ReadFile("./docs/test.gb")
+	cartridge.PrintHeader(dat)
 }
