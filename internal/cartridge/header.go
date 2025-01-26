@@ -315,7 +315,7 @@ func PrintHeader(cartridge []byte) {
 	headerChecksum := cartridge[0x14d]
 	globalChecksum := cartridge[0x14e:0x150]
 
-	fmt.Println(fmt.Sprintf("%X", entryPoint))
+	fmt.Println(fmt.Sprintf("entry point: %X", entryPoint))
 	fmt.Println(fmt.Sprintf("%X", nintendoLogo) + " " + fmt.Sprintf("%t", checkNintendoLogo(nintendoLogo)))
 	fmt.Println(title)
 	fmt.Println(fmt.Sprintf("%X", manufacturerCode))
