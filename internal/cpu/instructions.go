@@ -76,7 +76,7 @@ var Instructions = map[byte]func(){
 	0x43: func() { ldXInY(E, B) },
 	0x44: func() { ldXInY(H, B) },
 	0x45: func() { ldXInY(L, B) },
-	0x46: func() {},
+	0x46: func() { ldHLinX(B) },
 	0x47: func() { ldXInY(A, B) },
 	0x48: func() { ldXInY(B, C) },
 	0x49: func() { ldXInY(C, C) },
@@ -84,7 +84,7 @@ var Instructions = map[byte]func(){
 	0x4B: func() { ldXInY(E, C) },
 	0x4C: func() { ldXInY(H, C) },
 	0x4D: func() { ldXInY(L, C) },
-	0x4E: func() {},
+	0x4E: func() { ldHLinX(C) },
 	0x4F: func() { ldXInY(A, C) },
 	0x50: func() { ldXInY(B, D) },
 	0x51: func() { ldXInY(C, D) },
@@ -92,7 +92,7 @@ var Instructions = map[byte]func(){
 	0x53: func() { ldXInY(E, D) },
 	0x54: func() { ldXInY(H, D) },
 	0x55: func() { ldXInY(L, D) },
-	0x56: func() {},
+	0x56: func() { ldHLinX(D) },
 	0x57: func() { ldXInY(A, D) },
 	0x58: func() { ldXInY(B, E) },
 	0x59: func() { ldXInY(C, E) },
@@ -100,7 +100,7 @@ var Instructions = map[byte]func(){
 	0x5B: func() { ldXInY(E, E) },
 	0x5C: func() { ldXInY(H, E) },
 	0x5D: func() { ldXInY(L, E) },
-	0x5E: func() {},
+	0x5E: func() { ldHLinX(E) },
 	0x5F: func() { ldXInY(A, E) },
 	0x60: func() { ldXInY(B, H) },
 	0x61: func() { ldXInY(C, H) },
@@ -108,7 +108,7 @@ var Instructions = map[byte]func(){
 	0x63: func() { ldXInY(E, H) },
 	0x64: func() { ldXInY(H, H) },
 	0x65: func() { ldXInY(L, H) },
-	0x66: func() {},
+	0x66: func() { ldHLinX(H) },
 	0x67: func() { ldXInY(A, H) },
 	0x68: func() { ldXInY(B, L) },
 	0x69: func() { ldXInY(C, L) },
@@ -116,31 +116,31 @@ var Instructions = map[byte]func(){
 	0x6B: func() { ldXInY(E, L) },
 	0x6C: func() { ldXInY(H, L) },
 	0x6D: func() { ldXInY(L, L) },
-	0x6E: func() {},
+	0x6E: func() { ldHLinX(L) },
 	0x6F: func() { ldXInY(A, L) },
-	0x70: func() {},
-	0x71: func() {},
-	0x72: func() {},
-	0x73: func() {},
-	0x74: func() {},
-	0x75: func() {},
-	0x76: func() {},
-	0x77: func() {},
-	0x78: ld_a_b,
-	0x79: func() {},
-	0x7A: func() {},
-	0x7B: func() {},
-	0x7C: func() {},
-	0x7D: func() {},
-	0x7E: func() {},
-	0x7F: func() {},
+	0x70: func() { ldXInHL(B) },
+	0x71: func() { ldXInHL(C) },
+	0x72: func() { ldXInHL(D) },
+	0x73: func() { ldXInHL(E) },
+	0x74: func() { ldXInHL(H) },
+	0x75: func() { ldXInHL(L) },
+	0x76: func() { ldHLinX(B) },
+	0x77: func() { ldXInHL(A) },
+	0x78: func() { ldXInY(B, A) },
+	0x79: func() { ldXInY(C, A) },
+	0x7A: func() { ldXInY(D, A) },
+	0x7B: func() { ldXInY(E, A) },
+	0x7C: func() { ldXInY(H, A) },
+	0x7D: func() { ldXInY(L, A) },
+	0x7E: func() { ldHLinX(B) },
+	0x7F: func() { ldXInY(A, A) },
 	0x80: func() { addToA(B) },
 	0x81: func() { addToA(C) },
 	0x82: func() { addToA(D) },
 	0x83: func() { addToA(E) },
 	0x84: func() { addToA(H) },
 	0x85: func() { addToA(L) },
-	0x86: func() {},
+	0x86: func() { addToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)) },
 	0x87: func() { addToA(A) },
 	0x88: func() { adcToA(B) },
 	0x89: func() { adcToA(C) },
@@ -148,56 +148,56 @@ var Instructions = map[byte]func(){
 	0x8B: func() { adcToA(E) },
 	0x8C: func() { adcToA(H) },
 	0x8D: func() { adcToA(L) },
-	0x8E: func() {},
+	0x8E: func() { adcToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)) },
 	0x8F: func() { adcToA(A) },
-	0x90: func() {},
-	0x91: func() {},
-	0x92: func() {},
-	0x93: func() {},
-	0x94: func() {},
-	0x95: func() {},
-	0x96: func() {},
-	0x97: func() {},
-	0x98: func() {},
-	0x99: func() {},
-	0x9A: func() {},
-	0x9B: func() {},
-	0x9C: func() {},
-	0x9D: func() {},
-	0x9E: func() {},
-	0x9F: func() {},
-	0xA0: func() {},
-	0xA1: func() {},
-	0xA2: func() {},
-	0xA3: func() {},
-	0xA4: func() {},
-	0xA5: func() {},
-	0xA6: func() {},
-	0xA7: func() {},
-	0xA8: func() {},
-	0xA9: func() {},
-	0xAA: func() {},
-	0xAB: func() {},
-	0xAC: func() {},
-	0xAD: func() {},
-	0xAE: func() {},
-	0xAF: xor_a,
-	0xB0: or_b,
-	0xB1: or_c,
-	0xB2: or_d,
-	0xB3: or_e,
-	0xB4: or_h,
-	0xB5: or_l,
-	0xB6: func() {},
-	0xB7: or_a,
-	0xB8: func() {},
-	0xB9: func() {},
-	0xBA: func() {},
-	0xBB: func() {},
-	0xBC: func() {},
-	0xBD: func() {},
-	0xBE: func() {},
-	0xBF: func() {},
+	0x90: func() { subToA(B) },
+	0x91: func() { subToA(C) },
+	0x92: func() { subToA(D) },
+	0x93: func() { subToA(E) },
+	0x94: func() { subToA(H) },
+	0x95: func() { subToA(L) },
+	0x96: func() { subToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8))},
+	0x97: func() { subToA(A) },
+	0x98: func() { sbcToA(B) },
+	0x99: func() { sbcToA(C) },
+	0x9A: func() { sbcToA(D) },
+	0x9B: func() { sbcToA(E) },
+	0x9C: func() { sbcToA(H) },
+	0x9D: func() { sbcToA(L) },
+	0x9E: func() { sbcToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)) },
+	0x9F: func() { sbcToA(A) },
+	0xA0: func() { andToA(B) },
+	0xA1: func() { andToA(C) },
+	0xA2: func() { andToA(D) },
+	0xA3: func() { andToA(E) },
+	0xA4: func() { andToA(H) },
+	0xA5: func() { andToA(L) },
+	0xA6: func() { andToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)) },
+	0xA7: func() { andToA(A) },
+	0xA8: func() { xorToA(B) },
+	0xA9: func() { xorToA(C) },
+	0xAA: func() { xorToA(D) },
+	0xAB: func() { xorToA(E) },
+	0xAC: func() { xorToA(H) },
+	0xAD: func() { xorToA(L) },
+	0xAE: func() { xorToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)) },
+	0xAF: func() { xorToA(A) },
+	0xB0: func() { orToA(B) },
+	0xB1: func() { orToA(C) },
+	0xB2: func() { orToA(D) },
+	0xB3: func() { orToA(E) },
+	0xB4: func() { orToA(H) },
+	0xB5: func() { orToA(L) },
+	0xB6: func() { orToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)) },
+	0xB7: func() { orToA(A) },
+	0xB8: func() { cpToA(B) },
+	0xB9: func() { cpToA(C) },
+	0xBA: func() { cpToA(D) },
+	0xBB: func() { cpToA(E) },
+	0xBC: func() { cpToA(H) },
+	0xBD: func() { cpToA(L) },
+	0xBE: func() { cpToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)) },
+	0xBF: func() { cpToA(A) },
 	0xC0: func() {},
 	0xC1: func() {},
 	0xC2: func() {},
@@ -272,7 +272,7 @@ func addToA(reg byte) {
 }
 
 func adcToA(reg byte) {
-  A += reg + (F |= FlagsMasks["C"])
+	A += reg + (F | FlagsMasks["C"])
 	if A == 0 {
 		F |= FlagsMasks["Z"]
 	}
@@ -280,8 +280,73 @@ func adcToA(reg byte) {
 	PrintRegisters()
 }
 
+func subToA(reg byte) {
+	A -= reg
+	if A == 0 {
+		F |= FlagsMasks["Z"]
+	}
+	F |= FlagsMasks["N"]
+	NextPos()
+	PrintRegisters()
+}
+
+func sbcToA(reg byte) {
+	A -= reg + (F | FlagsMasks["C"])
+	if A == 0 {
+		F |= FlagsMasks["Z"]
+	}
+	NextPos()
+	PrintRegisters()
+}
+
+func andToA(reg byte) {
+	A &= reg
+	if (A) == 0 {
+		F |= FlagsMasks["Z"]
+	}
+}
+
+func xorToA(reg byte) {
+	A ^= reg
+	if (A) == 0 {
+		F |= FlagsMasks["Z"]
+	}
+	NextPos()
+	PrintRegisters()
+}
+
+func orToA(reg byte) {
+	A |= reg
+	if A == 0 {
+		F |= FlagsMasks["Z"]
+	}
+	NextPos()
+	PrintRegisters()
+}
+
+func cpToA(reg byte) {
+	if A-reg == 0 {
+		F |= FlagsMasks["Z"]
+	}
+	F |= FlagsMasks["N"]
+	NextPos()
+	PrintRegisters()
+}
+
 func ldXInY(x byte, y byte) {
 	y = x
+	NextPos()
+	PrintRegisters()
+}
+
+func ldHLinX(x byte) {
+	x = memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)
+	NextPos()
+	PrintRegisters()
+}
+
+func ldXInHL(x byte) {
+	memory.WriteRAMAtPos(uint16(H)+uint16(L)<<8, x)
 	NextPos()
 	PrintRegisters()
 }
@@ -317,23 +382,6 @@ func di() {
 
 func nop() {
 	fmt.Println("00 : NOP")
-	NextPos()
-	PrintRegisters()
-}
-
-func or_a() { or(A) }
-func or_b() { or(B) }
-func or_c() { or(C) }
-func or_d() { or(D) }
-func or_e() { or(E) }
-func or_h() { or(H) }
-func or_l() { or(L) }
-
-func or(reg byte) {
-	A |= reg
-	if A == 0 {
-		F |= FlagsMasks["Z"]
-	}
 	NextPos()
 	PrintRegisters()
 }
@@ -390,13 +438,6 @@ func cp_n8() {
 		F |= FlagsMasks["Z"]
 	}
 	F |= FlagsMasks["N"]
-	NextPos()
-	PrintRegisters()
-}
-
-func ld_a_b() {
-	fmt.Println("78 : LD A, B")
-	A = B
 	NextPos()
 	PrintRegisters()
 }
@@ -458,16 +499,6 @@ func ldh_a8_a() {
 	memoryPos := uint16(memory.ReadROMAtPos(GetPos() + 1))
 	memory.WriteRAMAtPos(uint16(0xFF00)+memoryPos, A)
 	NextPos()
-	NextPos()
-	PrintRegisters()
-}
-
-func xor_a() {
-	fmt.Println("AF : XOR A")
-	A ^= A
-	if (A) == 0 {
-		F |= FlagsMasks["Z"]
-	}
 	NextPos()
 	PrintRegisters()
 }
