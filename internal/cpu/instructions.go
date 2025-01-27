@@ -10,48 +10,48 @@ var Instructions = map[byte]func(){
 	0x01: ld_bc_n16,
 	0x02: func() {},
 	0x03: func() {},
-	0x04: func() {},
-	0x05: func() {},
+	0x04: func() { inc(B) },
+	0x05: func() { dec(B) },
 	0x06: func() {},
 	0x07: func() {},
 	0x08: func() {},
 	0x09: func() {},
 	0x0A: func() {},
 	0x0B: dec_bc,
-	0x0C: func() {},
-	0x0D: func() {},
+	0x0C: func() { inc(C) },
+	0x0D: func() { dec(C) },
 	0x0E: func() {},
 	0x0F: func() {},
 	0x10: func() {},
 	0x11: ld_de_n16,
 	0x12: func() {},
 	0x13: func() {},
-	0x14: func() {},
-	0x15: func() {},
+	0x14: func() { inc(D) },
+	0x15: func() { dec(D) },
 	0x16: func() {},
 	0x17: func() {},
 	0x18: jr_n8,
 	0x19: func() {},
 	0x1A: func() {},
 	0x1B: func() {},
-	0x1C: func() {},
-	0x1D: func() {},
+	0x1C: func() { inc(E) },
+	0x1D: func() { dec(E) },
 	0x1E: func() {},
 	0x1F: func() {},
 	0x20: jr_nz_e8,
 	0x21: func() {},
 	0x22: func() {},
 	0x23: func() {},
-	0x24: func() {},
-	0x25: func() {},
+	0x24: func() { inc(H) },
+	0x25: func() { dec(H) },
 	0x26: func() {},
 	0x27: func() {},
 	0x28: func() {},
 	0x29: func() {},
 	0x2A: func() {},
 	0x2B: func() {},
-	0x2C: func() {},
-	0x2D: func() {},
+	0x2C: func() { inc(L) },
+	0x2D: func() { dec(L) },
 	0x2E: func() {},
 	0x2F: func() {},
 	0x30: func() {},
@@ -66,8 +66,8 @@ var Instructions = map[byte]func(){
 	0x39: func() {},
 	0x3A: func() {},
 	0x3B: func() {},
-	0x3C: func() {},
-	0x3D: func() {},
+	0x3C: func() { inc(A) },
+	0x3D: func() { dec(A) },
 	0x3E: ld_a_n8,
 	0x3F: func() {},
 	0x40: func() { ldXInY(B, B) },
@@ -156,7 +156,7 @@ var Instructions = map[byte]func(){
 	0x93: func() { subToA(E) },
 	0x94: func() { subToA(H) },
 	0x95: func() { subToA(L) },
-	0x96: func() { subToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8))},
+	0x96: func() { subToA(memory.ReadROMAtPos(uint16(H) + uint16(L)<<8)) },
 	0x97: func() { subToA(A) },
 	0x98: func() { sbcToA(B) },
 	0x99: func() { sbcToA(C) },
@@ -205,7 +205,7 @@ var Instructions = map[byte]func(){
 	0xC4: func() {},
 	0xC5: func() {},
 	0xC6: func() {},
-	0xC7: func() {},
+	0xC7: func() { call_n16(0x00) },
 	0xC8: func() {},
 	0xC9: func() {},
 	0xCA: func() {},
@@ -213,53 +213,54 @@ var Instructions = map[byte]func(){
 	0xCC: func() {},
 	0xCD: call_a16,
 	0xCE: func() {},
-	0xCF: func() {},
+	0xCF: func() { call_n16(0x08) },
 	0xD0: func() {},
 	0xD1: func() {},
 	0xD2: func() {},
+	0xD3: func() { /* unused */ },
 	0xD4: func() {},
 	0xD5: func() {},
 	0xD6: func() {},
-	0xD7: func() {},
+	0xD7: func() { call_n16(0x10) },
 	0xD8: func() {},
 	0xD9: func() {},
 	0xDA: func() {},
-	0xDB: func() {},
+	0xDB: func() { /* unused */ },
 	0xDC: func() {},
-	0xDE: func() {},
-	0xDF: func() {},
+	0xDE: func() { /* unused */ },
+	0xDF: func() { call_n16(0x18) },
 	0xE0: ldh_a8_a,
 	0xE1: func() {},
 	0xE2: func() {},
-	0xE3: func() {},
-	0xE4: func() {},
+	0xE3: func() { /* unused */ },
+	0xE4: func() { /* unused */ },
 	0xE5: func() {},
 	0xE6: func() {},
-	0xE7: func() {},
+	0xE7: func() { call_n16(0x20) },
 	0xE8: func() {},
 	0xE9: func() {},
 	0xEA: ld_a16_a,
-	0xEB: func() {},
-	0xEC: func() {},
-	0xED: func() {},
+	0xEB: func() { /* unused */ },
+	0xEC: func() { /* unused */ },
+	0xED: func() { /* unused */ },
 	0xEE: func() {},
-	0xEF: func() {},
+	0xEF: func() { call_n16(0x28) },
 	0xF0: func() {},
 	0xF1: func() {},
 	0xF2: func() {},
 	0xF3: di,
-	0xF4: func() {},
+	0xF4: func() { /* unused */ },
 	0xF5: func() {},
 	0xF6: func() {},
-	0xF7: func() {},
+	0xF7: func() { call_n16(0x30) },
 	0xF8: func() {},
-	0xF9: func() {},
+	0xF9: func() { /* unused */ },
 	0xFA: func() {},
 	0xFB: func() {},
-	0xFC: func() {},
-	0xFD: func() {},
+	0xFC: func() { /* unused */ },
+	0xFD: func() { /* unused */ },
 	0xFE: cp_n8,
-	0xFF: func() {},
+	0xFF: func() { call_n16(0x38) },
 }
 
 func addToA(reg byte) {
@@ -351,6 +352,12 @@ func ldXInHL(x byte) {
 	PrintRegisters()
 }
 
+func call_n16(addr uint16) {
+	// memory.PushToStack(PC)
+	fmt.Println(addr)
+	NextPos()
+}
+
 func call_a16() {
 	fmt.Println("CD : CALL a16")
 	//PUSH PC TO STACK
@@ -382,6 +389,18 @@ func di() {
 
 func nop() {
 	fmt.Println("00 : NOP")
+	NextPos()
+	PrintRegisters()
+}
+
+func inc(reg byte) {
+	reg += 1
+	NextPos()
+	PrintRegisters()
+}
+
+func dec(reg byte) {
+	reg -= 1
 	NextPos()
 	PrintRegisters()
 }
